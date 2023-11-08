@@ -24,16 +24,16 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - echo dckr_pat_s84GmhpEleCFl0giHWeeQWxDj-Q | docker login --username zarmeena --password-stdin
-      - docker build -t ci-cd  .
-      - docker tag ci-cd:latest 071963907310.dkr.ecr.us-east-1.amazonaws.com/ci-cd:latest
+      - echo  dckr_pat_s84GmhpEleCFl0giHWeeQWxDj-Q | docker login --username zarmeena --password-stdin
+      - docker build -t ci-cd-pipeline .
+      - docker tag ci-cd-pipeline:latest 071963907310.dkr.ecr.us-east-1.amazonaws.com/ci-cd-pipeline:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 071963907310.dkr.ecr.us-east-1.amazonaws.com
       - docker images
-      - docker push 071963907310.dkr.ecr.us-east-1.amazonaws.com/ci-cd:latest || (echo "docker push failed" && exit 1)
+      - docker push 071963907310.dkr.ecr.us-east-1.amazonaws.com/ci-cd-pipeline:latest || (echo "docker push failed" && exit 1)
       - echo Updating kubeconfig...
       - aws eks update-kubeconfig --region us-east-1 --name eks
       - kubectl config current-context
