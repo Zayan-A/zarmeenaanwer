@@ -33,7 +33,7 @@ phases:
       - echo Pushing the Docker image...
       - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/p9f8h7l9
       - docker images
-      - docker push public.ecr.aws/p9f8h7l9/ci-cd-pipeline:latest || (echo "docker push failed" && exit 1)
+      - docker push public.ecr.aws/p9f8h7l9/ci-cd-pipeline:latest
       - echo Updating kubeconfig...
       - aws eks update-kubeconfig --region us-east-1 --name eks
       - kubectl config current-context
