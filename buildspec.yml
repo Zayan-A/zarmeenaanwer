@@ -24,16 +24,16 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - echo  dckr_pat_s84GmhpEleCFl0giHWeeQWxDj-Q | docker login --username zarmeena --password-stdin
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/p9f8h7l9
       - docker build -t ci-cd-pipeline .
-      - docker tag ci-cd-pipeline:latest 071963907310.dkr.ecr.us-east-1.amazonaws.com/ci-cd-pipeline:latest
+      - docker tag ci-cd-pipeline:latest public.ecr.aws/p9f8h7l9/ci-cd-pipeline:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 071963907310.dkr.ecr.us-east-1.amazonaws.com
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/p9f8h7l9
       - docker images
-      - docker push 071963907310.dkr.ecr.us-east-1.amazonaws.com/ci-cd-pipeline:latest || (echo "docker push failed" && exit 1)
+      - docker push public.ecr.aws/p9f8h7l9/ci-cd-pipeline:latest || (echo "docker push failed" && exit 1)
       - echo Updating kubeconfig...
       - aws eks update-kubeconfig --region us-east-1 --name eks
       - kubectl config current-context
